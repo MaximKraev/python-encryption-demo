@@ -52,21 +52,19 @@ def main():
 
   action = sys.argv[1]
   inputFile = sys.argv[2]
-  # aes requires fixed key length, lets create it
   password = raw_input('Enter Password (will be visible): ')
-  #password = sys.stdin.readline()
   # fo AES256 we need 32 bit key, lets create it from password
   passwordHash = hash(password, 32)
-  # encription
-  if (action == 'encrypt'):
-    text = readFile(inputFile)
+  text = readFile(inputFile)
+
+  if (action == 'encrypt'): # encription
     encryptedText = encrypt(text, passwordHash)
     if (len(sys.argv) == 4):
       writeFile(sys.argv[3], encryptedText)
     else:
       print(encryptedText)
+
   elif(action == 'decrypt'): # decryption
-    text = readFile(inputFile)
     decryptedText = decrypt(text, passwordHash)
     if (len(sys.argv) == 4):
       writeFile(sys.argv[3], decryptedText)
