@@ -76,13 +76,13 @@ def decrypt(args):
     sys.stdout.write(decrypted_text)
 
 def read_file(filename):
-  handler = open(filename, "rb")
+  handler = open(filename, "r")
   content = handler.read()
   handler.close()
   return content
 
 def write_file(filename, text):
-  handler = open(filename, "wb")
+  handler = open(filename, "w")
   handler.write(text)
   handler.close()
 
