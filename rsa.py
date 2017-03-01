@@ -7,7 +7,7 @@ from Crypto.PublicKey import RSA
 
 def usage():
   print """Usage:
-     rsa.py keys private.pem public.pem
+     rsa.py keys <private.key> <public.key>
      rsa.py encrypt public.pem inputFile <outputFile>
      rsa.py decrypt private.pem inputFile <outputFile>
      """
