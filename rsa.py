@@ -10,7 +10,7 @@ CRYPT_BLOCK_SIZE = 128
 def usage():
   print """Usage:
      rsa.py keys <private.key> <public.key>
-     rsa.py encrypt public.pem inputFile outputFile
+     rsa.py encrypt public.pem inputFile <outputFile>
      rsa.py decrypt private.pem inputFile <outputFile>
      """
   exit(1)
@@ -30,7 +30,7 @@ def keys(filenames):
   write_file(private_key_filename, key.exportKey())
 
 def encrypt(args):
-  if len(args) < 3:
+  if len(args) < 2:
     usage()
 
   public_key_file = args[0]
@@ -46,9 +46,11 @@ def encrypt(args):
     encrypted_text += key.encrypt(chunk, 32)[0]
     if len(text_to_encrypt) == 0:
       break
-
-  write_file(args[2], encrypted_text)
-
+  encoded_text = _encode(encrypted_text)
+  if len(args) == 3:
+    write_file(args[2], encoded_text)
+  else:
+    sys.stdout.write(encoded_text)
 
 def decrypt(args):
   if len(args) < 2:
@@ -59,7 +61,7 @@ def decrypt(args):
 
   private_key = read_file(private_key_file)
   key = RSA.importKey(private_key)
-  encrypted_text = read_file(source_file)
+  encrypted_text = _decode(read_file(source_file))
   decrypted_text = ''
   while True:
     chunk = encrypted_text[:CRYPT_BLOCK_SIZE]
@@ -83,6 +85,12 @@ def write_file(filename, text):
   handler = open(filename, "wb")
   handler.write(text)
   handler.close()
+
+def _encode(string):
+  return base64.b64encode(string)
+
+def _decode(string):
+  return base64.b64decode(string)
 
 def main():
   arguments = sys.argv
